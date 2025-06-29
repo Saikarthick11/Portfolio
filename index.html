@@ -78,7 +78,7 @@
         .project-card-links a, .certification-item-links a {
             @apply text-blue-500 hover:text-blue-600 font-medium transition-colors duration-200 flex items-center text-lg; /* More vibrant blue for links */
         }
-        .project-card-links a svg, .project-card-links a i, .certification-item-links a svg, .certification-item-links a i {
+        .project-card-links a svg, .project-item-links a i, .certification-item-links a svg, .certification-item-links a i {
             @apply mr-2;
         }
 
@@ -206,6 +206,31 @@
             border: 1px solid #3b82f6;
             opacity: 0.9;
         }
+
+        /* Header Navigation Link Styling - Bottom-Fill Highlight */
+        .nav-link {
+            @apply relative inline-flex items-center justify-center py-2 px-4 text-gray-300 font-medium transition-all duration-300 text-lg rounded-md;
+            overflow: hidden; /* Important for the fill effect */
+            z-index: 1;
+        }
+
+        .nav-link::before {
+            content: '';
+            @apply absolute bottom-0 left-0 w-full bg-white rounded-md; /* White background */
+            height: 0; /* Start with 0 height */
+            transition: height 0.3s ease-out; /* Animate height */
+            z-index: -1; /* Place behind text */
+        }
+
+        .nav-link:hover::before {
+            height: 100%; /* Fill to full height on hover */
+        }
+
+        .nav-link:hover {
+            @apply text-black; /* Text changes to black on hover */
+            transform: translateY(-3px) scale(1.02); /* Slight lift and scale */
+            text-shadow: none; /* Remove text shadow when background is white */
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -216,14 +241,14 @@
     <!-- Header/Navigation -->
     <header class="bg-0a0a0a py-4 shadow-xl fixed top-0 w-full z-50">
         <nav class="container flex justify-end items-center">
-            <ul class="flex space-x-8">
-                <li><a href="#home" class="nav-link text-gray-300 hover:text-blue-500 font-medium transition-colors duration-200 text-lg">Home</a></li>
-                <li><a href="#about" class="nav-link text-gray-300 hover:text-blue-500 font-medium transition-colors duration-200 text-lg">About</a></li>
-                <li><a href="#skills" class="nav-link text-gray-300 hover:text-blue-500 font-medium transition-colors duration-200 text-lg">Skills</a></li>
-                <li><a href="#experience" class="nav-link text-gray-300 hover:text-blue-500 font-medium transition-colors duration-200 text-lg">Experience</a></li>
-                <li><a href="#projects" class="nav-link text-gray-300 hover:text-blue-500 font-medium transition-colors duration-200 text-lg">Projects</a></li>
-                <li><a href="#certifications-awards" class="nav-link text-gray-300 hover:text-blue-500 font-medium transition-colors duration-200 text-lg">Certifications</a></li>
-                <li><a href="#contact" class="nav-link text-gray-300 hover:text-blue-500 font-medium transition-colors duration-200 text-lg">Contact</a></li>
+            <ul class="flex flex-wrap justify-end gap-x-4 sm:gap-x-8"> <!-- Added flex-wrap and gap-x for responsiveness -->
+                <li><a href="#home" class="nav-link interactive-element">Home</a></li>
+                <li><a href="#about" class="nav-link interactive-element">About</a></li>
+                <li><a href="#skills" class="nav-link interactive-element">Skills</a></li>
+                <li><a href="#experience" class="nav-link interactive-element">Experience</a></li>
+                <li><a href="#projects" class="nav-link interactive-element">Projects</a></li>
+                <li><a href="#certifications-awards" class="nav-link interactive-element">Certifications</a></li>
+                <li><a href="#contact" class="nav-link interactive-element">Contact</a></li>
             </ul>
         </nav>
     </header>
@@ -238,17 +263,6 @@
             <p class="text-xl md:text-2xl lg:text-3xl text-gray-200 mb-10 max-w-3xl mx-auto">
                 Junior Engineer | GCP Cloud Engineer | Automation Specialist
             </p>
-            <div class="flex justify-center space-x-6 mb-12">
-                <a href="https://www.linkedin.com/in/yourprofile" target="_blank" class="social-icon text-gray-400 hover:text-blue-500 transition-colors duration-200 text-4xl transform hover:scale-110">
-                    <i class="fab fa-linkedin"></i>
-                </a>
-                <a href="https://github.com/yourprofile" target="_blank" class="social-icon text-gray-400 hover:text-blue-500 transition-colors duration-200 text-4xl transform hover:scale-110">
-                    <i class="fab fa-github"></i>
-                </a>
-                <a href="mailto:csaikarthick2002@gmail.com" class="social-icon text-gray-400 hover:text-blue-500 transition-colors duration-200 text-4xl transform hover:scale-110">
-                    <i class="fas fa-envelope"></i>
-                </a>
-            </div>
             <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
                 <a href="#" class="inline-flex items-center px-8 py-4 border border-transparent text-lg font-medium rounded-full shadow-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors duration-200 hero-button interactive-element">
                     <i class="fas fa-download mr-3"></i> Download CV
@@ -508,10 +522,10 @@
                     </a>
                 </div>
                 <div class="flex justify-center space-x-8 mt-12">
-                    <a href="https://www.linkedin.com/in/yourprofile" target="_blank" class="social-icon text-gray-400 hover:text-blue-500 transition-colors duration-200 text-5xl transform hover:scale-110">
+                    <a href="https://www.linkedin.com/in/yourprofile" target="_blank" class="social-icon text-gray-400 hover:text-blue-500 transition-colors duration-200 text-5xl transform hover:scale-110 interactive-element">
                         <i class="fab fa-linkedin"></i>
                     </a>
-                    <a href="https://github.com/yourprofile" target="_blank" class="social-icon text-gray-400 hover:text-blue-500 transition-colors duration-200 text-5xl transform hover:scale-110">
+                    <a href="https://github.com/yourprofile" target="_blank" class="social-icon text-gray-400 hover:text-blue-500 transition-colors duration-200 text-5xl transform hover:scale-110 interactive-element">
                         <i class="fab fa-github"></i>
                     </a>
                 </div>
