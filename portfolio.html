@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saikarthick C - Portfolio</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Montserrat -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome for social icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif; /* Changed font to Montserrat */
+            background-color: #000000; /* Pure black background */
+            color: #f0f0f0; /* Slightly lighter text for contrast on pure black */
+            line-height: 1.6;
+            cursor: none; /* Hide default cursor */
+        }
+        .container {
+            @apply mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl; /* Max width for content */
+        }
+        .section-heading {
+            @apply text-4xl lg:text-5xl font-extrabold text-white text-center mb-16 relative;
+        }
+        .section-heading::after {
+            content: '';
+            @apply block w-24 h-1.5 bg-blue-600 mx-auto mt-6 rounded-full; /* Vibrant blue underline */
+        }
+        .card {
+            @apply bg-101010 p-8 md:p-10 rounded-2xl shadow-2xl transition-all duration-300 border border-gray-900; /* Very dark gray card background, darker border */
+            box-shadow: 0 15px 30px -8px rgba(0, 0, 0, 0.8); /* Stronger, deeper shadow for black theme */
+        }
+        .card:hover {
+            transform: translateY(-8px); /* More pronounced lift effect on hover */
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 1); /* Even more pronounced shadow */
+        }
+
+        .skill-item {
+            @apply flex flex-col items-center p-6 rounded-xl bg-1a1a1a hover:bg-2a2a2a transition-all duration-300 cursor-pointer border border-gray-800;
+            box-shadow: 0 5px 15px -3px rgba(0, 0, 0, 0.5);
+        }
+        .skill-item:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.7);
+        }
+        .skill-item svg, .skill-item i {
+            @apply text-6xl text-blue-500 mb-4; /* More vibrant blue for icons */
+        }
+        .project-card, .certification-item {
+            @apply bg-101010 rounded-xl shadow-xl overflow-hidden flex flex-col h-full border border-gray-900 transition-all duration-300 cursor-pointer;
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.6);
+        }
+        .project-card:hover, .certification-item:hover {
+            transform: translateY(-8px) scale(1.005);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.9);
+        }
+        .project-card img, .certification-item img {
+            @apply w-full h-48 object-cover transition-transform duration-300;
+        }
+        .project-card:hover img, .certification-item:hover img {
+            transform: scale(1.08);
+        }
+        .project-card-content, .certification-item-content {
+            @apply p-6 flex flex-col flex-grow;
+        }
+        .project-card-title, .certification-item-title {
+            @apply text-2xl font-bold text-white mb-2;
+        }
+        .project-card-description, .certification-item-description {
+            @apply text-gray-300 text-base flex-grow mb-4; /* Adjusted text color for contrast */
+        }
+        .project-card-links, .certification-item-links {
+            @apply flex justify-between items-center mt-auto;
+        }
+        .project-card-links a, .certification-item-links a {
+            @apply text-blue-500 hover:text-blue-600 font-medium transition-colors duration-200 flex items-center text-lg; /* More vibrant blue for links */
+        }
+        .project-card-links a svg, .project-card-links a i, .certification-item-links a svg, .certification-item-links a i {
+            @apply mr-2;
+        }
+
+        /* Fade-in on scroll */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+            will-change: opacity, transform;
+        }
+
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Back to Top button */
+        #back-to-top {
+            display: none;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 99;
+            border: none;
+            outline: none;
+            background-color: #3b82f6; /* Blue accent */
+            color: white;
+            cursor: pointer;
+            padding: 18px;
+            border-radius: 50%;
+            font-size: 20px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6); /* Stronger shadow */
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+        }
+        #back-to-top:hover {
+            background-color: #2563eb;
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Profile image initial animation */
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        .profile-image-animated {
+            animation: fadeInScale 1s ease-out forwards;
+            filter: grayscale(40%) brightness(120%); /* Subtle filter for a polished look */
+            transition: filter 0.3s ease-in-out;
+        }
+    
+        .profile-image-animated:hover {
+            filter: grayscale(0%) brightness(100%);
+        }
+
+        /* Button hover effects */
+        .hero-button {
+            transition: all 0.3s ease-in-out;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .hero-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2); /* More prominent overlay */
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+            z-index: -1;
+        }
+        .hero-button:hover::before {
+            transform: translateX(0);
+        }
+
+        /* Hero section specific background */
+        .hero-section-bg {
+            background-image:
+                linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)), /* Stronger overlay for text readability */
+                radial-gradient(circle at 25% 10%, rgba(59, 130, 246, 0.15) 0%, transparent 40%), /* Blue glow 1 */
+                radial-gradient(circle at 75% 90%, rgba(139, 92, 246, 0.15) 0%, transparent 40%), /* Purple glow 2 */
+                repeating-linear-gradient(0deg, rgba(255,255,255,.04) 0px, rgba(255,255,255,.04) 1px, transparent 1px, transparent 40px),
+                repeating-linear-gradient(90deg, rgba(255,255,255,.04) 0px, rgba(255,255,255,.04) 1px, transparent 1px, transparent 40px);
+            background-blend-mode: overlay, normal, normal, normal, normal;
+            background-color: #000000; /* Base background for hero */
+        }
+
+        /* Font Awesome Specific Overrides/Fixes */
+        .fa-golang::before {
+            content: "\f425";
+        }
+        .fa-c::before {
+            content: "\f608";
+        }
+
+        /* Custom Cursor Styles */
+        #custom-cursor-dot {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 10px;
+            height: 10px;
+            background-color: #3b82f6; /* Blue dot */
+            border-radius: 50%;
+            pointer-events: none; /* Allows clicks to pass through */
+            z-index: 10000; /* Ensure it's on top */
+            opacity: 1;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s ease-out, height 0.2s ease-out, background-color 0.2s ease-out, opacity 0.2s ease-out;
+        }
+
+        #custom-cursor-dot.grow {
+            width: 40px; /* Larger size on hover */
+            height: 40px;
+            background-color: rgba(59, 130, 246, 0.4); /* More visible transparent blue on hover */
+            border: 1px solid #3b82f6;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Custom Cursor Element -->
+    <div id="custom-cursor-dot"></div>
+
+    <!-- Header/Navigation -->
+    <header class="bg-0a0a0a py-4 shadow-xl fixed top-0 w-full z-50">
+        <nav class="container flex justify-end items-center">
+            <ul class="flex space-x-8">
+                <li><a href="#home" class="nav-link text-gray-300 hover:text-blue-500 font-medium transition-colors duration-200 text-lg">Home</a></li>
+                <li><a href="#about" class="nav-link text-gray-300 hover:text-blue-500 font-medium transition-colors duration-200 text-lg">About</a></li>
+                <li><a href="#skills" class="nav-link text-gray-300 hover:text-blue-500 font-medium transition-colors duration-200 text-lg">Skills</a></li>
+                <li><a href="#experience" class="nav-link text-gray-300 hover:text-blue-500 font-medium transition-colors duration-200 text-lg">Experience</a></li>
+                <li><a href="#projects" class="nav-link text-gray-300 hover:text-blue-500 font-medium transition-colors duration-200 text-lg">Projects</a></li>
+                <li><a href="#certifications-awards" class="nav-link text-gray-300 hover:text-blue-500 font-medium transition-colors duration-200 text-lg">Certifications</a></li>
+                <li><a href="#contact" class="nav-link text-gray-300 hover:text-blue-500 font-medium transition-colors duration-200 text-lg">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section-bg min-h-screen flex items-center justify-center pt-20 relative overflow-hidden">
+        <div class="container text-center py-16 px-6 fade-in-section relative z-10">
+            <img src="https://placehold.co/200x200/222222/bbbbbb?text=SC" alt="Saikarthick C Profile" class="rounded-full w-48 h-48 object-cover mx-auto mb-8 shadow-lg ring-4 ring-blue-600 profile-image-animated">
+            <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-white mb-4 leading-tight">
+                Hi, I'm <span class="text-blue-500">Saikarthick C</span>
+            </h1>
+            <p class="text-xl md:text-2xl lg:text-3xl text-gray-200 mb-10 max-w-3xl mx-auto">
+                Junior Engineer | GCP Cloud Engineer | Automation Specialist
+            </p>
+            <div class="flex justify-center space-x-6 mb-12">
+                <a href="https://www.linkedin.com/in/yourprofile" target="_blank" class="social-icon text-gray-400 hover:text-blue-500 transition-colors duration-200 text-4xl transform hover:scale-110">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+                <a href="https://github.com/yourprofile" target="_blank" class="social-icon text-gray-400 hover:text-blue-500 transition-colors duration-200 text-4xl transform hover:scale-110">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="mailto:csaikarthick2002@gmail.com" class="social-icon text-gray-400 hover:text-blue-500 transition-colors duration-200 text-4xl transform hover:scale-110">
+                    <i class="fas fa-envelope"></i>
+                </a>
+            </div>
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+                <a href="#" class="inline-flex items-center px-8 py-4 border border-transparent text-lg font-medium rounded-full shadow-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors duration-200 hero-button interactive-element">
+                    <i class="fas fa-download mr-3"></i> Download CV
+                </a>
+                <a href="#contact" class="inline-flex items-center px-8 py-4 border-2 border-blue-600 text-lg font-medium rounded-full text-blue-500 bg-transparent hover:bg-gray-900 transition-colors duration-200 hero-button interactive-element">
+                    <i class="fas fa-comments mr-3"></i> Let's Talk
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container py-24 space-y-32">
+
+        <!-- About Me Section -->
+        <section id="about" class="fade-in-section">
+            <h2 class="section-heading">About Me</h2>
+            <div class="card max-w-5xl mx-auto interactive-element">
+                <p class="text-xl leading-relaxed text-gray-300 text-center">
+                    A highly motivated and results-driven Computer Science professional with a strong background in cloud platforms (GCP),
+                    serverless technologies, and automation. Currently pursuing a Master of Science in Computer Science at George Mason University,
+                    I bring hands-on experience in developing and optimizing scalable solutions, enhancing security compliance, and
+                    streamlining operational workflows. My expertise spans across Go, Python, JavaScript, and Terraform, with a proven
+                    ability to re-architect complex systems for improved efficiency and cost savings. I am passionate about leveraging technology
+                    to solve real-world problems and drive innovation.
+                </p>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="fade-in-section">
+            <h2 class="section-heading">Technical Skills</h2>
+            <div class="card max-w-6xl mx-auto">
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-8 text-gray-300">
+                    <!-- Programming Languages -->
+                    <div class="skill-item interactive-element">
+                        <i class="fab fa-python"></i>
+                        <span class="font-semibold text-xl">Python</span>
+                    </div>
+                    <div class="skill-item interactive-element">
+                        <i class="fas fa-golang"></i>
+                        <span class="font-semibold text-xl">Go</span>
+                    </div>
+                    <div class="skill-item interactive-element">
+                        <i class="fab fa-js"></i>
+                        <span class="font-semibold text-xl">JavaScript</span>
+                    </div>
+                    <div class="skill-item interactive-element">
+                        <i class="fab fa-java"></i>
+                        <span class="font-semibold text-xl">Java</span>
+                    </div>
+                    <div class="skill-item interactive-element">
+                        <i class="fas fa-c"></i>
+                        <span class="font-semibold text-xl">C</span>
+                    </div>
+                    <!-- Cloud Platform -->
+                    <div class="skill-item interactive-element">
+                        <i class="fas fa-cloud"></i>
+                        <span class="font-semibold text-xl">GCP</span>
+                    </div>
+                    <div class="skill-item interactive-element">
+                        <i class="fas fa-terminal"></i>
+                        <span class="font-semibold text-xl">Terraform</span>
+                    </div>
+                    <!-- Web Frameworks -->
+                    <div class="skill-item interactive-element">
+                        <i class="fab fa-html5"></i>
+                        <span class="font-semibold text-xl">HTML</span>
+                    </div>
+                    <div class="skill-item interactive-element">
+                        <i class="fab fa-css3-alt"></i>
+                        <span class="font-semibold text-xl">CSS</span>
+                    </div>
+                    <!-- Database -->
+                    <div class="skill-item interactive-element">
+                        <i class="fas fa-database"></i>
+                        <span class="font-semibold text-xl">SQL</span>
+                    </div>
+                    <!-- BPM Tool -->
+                    <div class="skill-item interactive-element">
+                        <i class="fas fa-cogs"></i>
+                        <span class="font-semibold text-xl">PEGA</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="experience" class="fade-in-section">
+            <h2 class="section-heading">Work Experience</h2>
+            <div class="card max-w-5xl mx-auto">
+                <div class="space-y-12">
+                    <!-- Junior Engineer -->
+                    <div class="border-b border-gray-800 pb-8 last:border-b-0 last:pb-0 interactive-element">
+                        <h3 class="text-2xl font-bold text-white mb-2">Junior Engineer, <span class="text-blue-500">Ford Motor Pvt Ltd, Chennai</span></h3>
+                        <p class="text-gray-400 text-lg mb-4">Jul 2024 - Jun 2025</p>
+                        <ul class="list-disc ml-8 text-gray-300 space-y-3 text-base">
+                            <li>Implemented and supported serverless services such as Cloudrun, Cloud functions and Eventarc on Google Cloud Platform (GCP).</li>
+                            <li>Developed a Terraform module (lac) for deploying GCP resources, such as Cloud Run and Cloud Functions.</li>
+                            <li>Developed an automation for the internal team to keep scanning and notifying non-rotated secrets to ensure security compliance using Python.</li>
+                            <li>Led the successful re-architecture of a Cloud Run shutdown application into a decoupled Front-end and Back-end structure, meeting security compliance requirements with zero downtime; simultaneously integrated security analysis tools (Fossa, SonarQube, Checkmarx) into the development pipeline to automate vulnerability detection, enforce security standards, and ensure code/license compliance for the application.</li>
+                            <li>Enhanced Cloud Run shutdown automation with selective email notifications, significantly reducing email spam and improving the user experience for recurring scheduler users.</li>
+                            <li>Developed and integrated a time-series cost-savings reporting feature (monthly/quarterly) into the shutdown automation, providing project owners with clear, quantifiable visibility into cloud expenditure reductions.</li>
+                            <li>Implemented proactive monitoring and alerting for Cloud Run services to detect and flag dropped or missing logs, ensuring critical observability and enabling timely incident investigation and resolution.</li>
+                            <li>Enhanced the shutdown automation platform (built with Go for the backend, JavaScript for the frontend, and PostgreSQL for the database) by adding the capability to stop and restart multiple services concurrently, significantly increasing operational efficiency and providing users with greater flexibility compared to previous single-service limitations, resulting in cost savings of approximately $2000 per week.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Software Engineer Intern -->
+                    <div class="border-b border-gray-800 pb-8 last:border-b-0 last:pb-0 interactive-element">
+                        <h3 class="text-2xl font-bold text-white mb-2">Software Engineer Intern, <span class="text-blue-500">Ford Motor Pvt Ltd, Chennai</span></h3>
+                        <p class="text-gray-400 text-lg mb-4">Jan 2024 - Jul 2024</p>
+                        <ul class="list-disc ml-8 text-gray-300 space-y-3 text-base">
+                            <li>Trained in Google Cloud Platform and its various services.</li>
+                            <li>Participated in Proof of Concept (POC) on serverless service's new features, and made them available to customers.</li>
+                            <li>Worked with Cloud Run, Cloud Functions, and Event Arc.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="fade-in-section">
+            <h2 class="section-heading">Academic Projects</h2>
+            <div class="card max-w-6xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-10">
+                    <!-- Project Card 1: Leave Management Portal -->
+                    <div class="project-card interactive-element">
+                        <img src="https://placehold.co/600x300/1e1e1e/888888?text=Leave+Management+Portal" alt="Leave Management Portal">
+                        <div class="project-card-content">
+                            <h3 class="project-card-title">Leave Management Portal</h3>
+                            <p class="project-card-description">
+                                An internet-based application for college-wide leave management, facilitating approval processes for faculty and students. Developed using HTML, CSS, PHP, and MySQL.
+                            </p>
+                            <div class="project-card-links">
+                                <a href="https://github.com/yourgithub/leave-management-portal" target="_blank" class="interactive-element">
+                                    <i class="fab fa-github"></i> View Code
+                                </a>
+                                <a href="#" target="_blank" class="interactive-element">
+                                    <i class="fas fa-external-link-alt"></i> Live Demo
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project Card 2: Canteen Automation Foodzzoi -->
+                    <div class="project-card interactive-element">
+                        <img src="https://placehold.co/600x300/1e1e1e/888888?text=Foodzzoi+Canteen+Automation" alt="Canteen Automation Foodzzoi">
+                        <div class="project-card-content">
+                            <h3 class="project-card-title">Canteen Automation Foodzzoi</h3>
+                            <p class="project-card-description">
+                                A Pega-based system streamlining canteen operations with cashless transactions and real-time inventory, enhancing productivity and student experience.
+                            </p>
+                            <div class="project-card-links">
+                                <a href="https://github.com/yourgithub/canteen-automation-foodzzoi" target="_blank" class="interactive-element">
+                                    <i class="fab fa-github"></i> View Code
+                                </a>
+                                <a href="#" target="_blank" class="interactive-element">
+                                    <i class="fas fa-external-link-alt"></i> Live Demo
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Certifications & Awards Section -->
+        <section id="certifications-awards" class="fade-in-section">
+            <h2 class="section-heading">Certifications & Achievements</h2>
+            <div class="card max-w-6xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                    <!-- Certifications -->
+                    <div class="certification-item interactive-element">
+                        <img src="https://placehold.co/600x300/1e1e1e/888888?text=RHCSA+Cert" alt="RedHat Certified System Administrator (RHCSA) Certification">
+                        <div class="certification-item-content">
+                            <h3 class="certification-item-title">RedHat Certified System Administrator (RHCSA)</h3>
+                            <p class="certification-item-description">Demonstrates essential skills for managing Red Hat Enterprise Linux systems.</p>
+                            <div class="certification-item-links">
+                                <a href="#" target="_blank" class="text-blue-500 hover:text-blue-600 interactive-element">
+                                    <i class="fas fa-external-link-alt"></i> View Credential
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="certification-item interactive-element">
+                        <img src="https://placehold.co/600x300/1e1e1e/888888?text=CPSA+Cert" alt="Certified Pega System Architect (CPSA) Certification">
+                        <div class="certification-item-content">
+                            <h3 class="certification-item-title">Certified Pega System Architect (CPSA)</h3>
+                            <p class="certification-item-description">Proficiency in designing and building Pega applications.</p>
+                            <div class="certification-item-links">
+                                <a href="#" target="_blank" class="text-blue-500 hover:text-blue-600 interactive-element">
+                                    <i class="fas fa-external-link-alt"></i> View Credential
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="certification-item interactive-element">
+                        <img src="https://placehold.co/600x300/1e1e1e/888888?text=CPSSA+Cert" alt="Certified Pega Senior System Architect (CPSSA) Certification">
+                        <div class="certification-item-content">
+                            <h3 class="certification-item-title">Certified Pega Senior System Architect (CPSSA)</h3>
+                            <p class="certification-item-description">Advanced expertise in Pega platform architecture and development.</p>
+                            <div class="certification-item-links">
+                                <a href="#" target="_blank" class="text-blue-500 hover:text-blue-600 interactive-element">
+                                    <i class="fas fa-external-link-alt"></i> View Credential
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="certification-item interactive-element">
+                        <img src="https://placehold.co/600x300/1e1e1e/888888?text=GCP+ACE+Cert" alt="Google Cloud Certified Associate Cloud Engineer Certification">
+                        <div class="certification-item-content">
+                            <h3 class="certification-item-title">Google Cloud Certified Associate Cloud Engineer</h3>
+                            <p class="certification-item-description">Proficient in deploying and managing applications on Google Cloud.</p>
+                            <div class="certification-item-links">
+                                <a href="#" target="_blank" class="text-blue-500 hover:text-blue-600 interactive-element">
+                                    <i class="fas fa-external-link-alt"></i> View Credential
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Awards & Achievements - can be styled similar to certification items if images/separate cards are desired -->
+                    <div class="certification-item md:col-span-full interactive-element">
+                        <div class="certification-item-content">
+                            <h3 class="certification-item-title text-3xl font-bold text-white mb-4 text-center">Awards & Achievements</h3>
+                            <ul class="list-disc ml-8 text-gray-300 space-y-3 text-base">
+                                <li>Recognized for automating scanning and deletion of secrets in GCP secret manager at Ford Motor Company.</li>
+                                <li>Received the "Inspirational Star Award" in academics (2021-2024).</li>
+                                <li>Secured $2^{nd}$ place in "KLUG KODERS 2.0: Innovative Design Project Exhibition 2023."</li>
+                                <li>M Iswarya, C Saikarthick, K Sudarshan, "Leave Management Portal," published in IEEE Explore, International Conference on Computational Science and Technology (ICCST) 2022.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Contact Section -->
+        <section id="contact" class="fade-in-section">
+            <h2 class="section-heading">Get In Touch</h2>
+            <div class="card max-w-xl mx-auto text-center interactive-element">
+                <p class="text-lg md:text-xl text-gray-300 mb-10">
+                    I'm currently seeking new opportunities and collaborations. Feel free to connect!
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center items-center space-y-6 sm:space-y-0 sm:space-x-8">
+                    <a href="mailto:csaikarthick2002@gmail.com" class="inline-flex items-center text-blue-500 hover:text-blue-600 transition-colors duration-200 text-xl font-medium interactive-element">
+                        <i class="fas fa-envelope text-3xl mr-3"></i> csaikarthick2002@gmail.com
+                    </a>
+                    <a href="tel:+919176088991" class="inline-flex items-center text-blue-500 hover:text-blue-600 transition-colors duration-200 text-xl font-medium interactive-element">
+                        <i class="fas fa-phone-alt text-3xl mr-3"></i> +91 9176088991
+                    </a>
+                </div>
+                <div class="flex justify-center space-x-8 mt-12">
+                    <a href="https://www.linkedin.com/in/yourprofile" target="_blank" class="social-icon text-gray-400 hover:text-blue-500 transition-colors duration-200 text-5xl transform hover:scale-110">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="https://github.com/yourprofile" target="_blank" class="social-icon text-gray-400 hover:text-blue-500 transition-colors duration-200 text-5xl transform hover:scale-110">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-0a0a0a text-white py-10 mt-20 text-center rounded-t-3xl shadow-inner-top">
+        <p class="text-lg">&copy; 2025 Saikarthick C. All rights reserved.</p>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" title="Go to top">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>
+    </button>
+
+    <script>
+        // Custom Cursor Logic
+        const customCursor = document.getElementById('custom-cursor-dot');
+        let mouseX = 0;
+        let mouseY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateCursor() {
+            // Smoothly move the cursor
+            customCursor.style.left = mouseX + 'px';
+            customCursor.style.top = mouseY + 'px';
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor(); // Start the animation loop
+
+        // Add 'interactive-element' class to elements that trigger cursor change
+        const interactiveElements = document.querySelectorAll(
+            'a, .card, .skill-item, .project-card, .certification-item, .hero-button, .social-icon'
+        );
+
+        interactiveElements.forEach(element => {
+            element.addEventListener('mouseenter', () => {
+                customCursor.classList.add('grow');
+            });
+            element.addEventListener('mouseleave', () => {
+                customCursor.classList.remove('grow');
+            });
+        });
+
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a.nav-link').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                const offset = document.querySelector('header').offsetHeight; // Offset by header height
+                const bodyRect = document.body.getBoundingClientRect().top;
+                const elementRect = targetElement.getBoundingClientRect().top;
+                const elementPosition = elementRect - bodyRect;
+                const offsetPosition = elementPosition - offset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Back to Top button functionality
+        const backToTopButton = document.getElementById('back-to-top');
+
+        // Show/hide the button based on scroll position
+        window.onscroll = function() {
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                backToTopButton.style.display = "block";
+            } else {
+                backToTopButton.style.display = "none";
+            }
+        };
+
+        // Scroll to the top when the button is clicked
+        backToTopButton.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Fade-in on scroll animation for sections
+        const fadeInSections = document.querySelectorAll('.fade-in-section');
+
+        const fadeInObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            rootMargin: '0px',
+            threshold: 0.1 // Trigger when 10% of the section is visible
+        });
+
+        fadeInSections.forEach(section => {
+            fadeInObserver.observe(section);
+        });
+    </script>
+</body>
+</html>
